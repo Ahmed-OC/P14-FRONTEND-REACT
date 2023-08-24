@@ -1,27 +1,52 @@
 import MUIDataTable, { SelectableRows } from "mui-datatables";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { getEmployees } from "../../api/employee";
+import { EmployeeData } from "../../types/employee.types";
 function EmployeeList() {
-  const camelCaseToTitleCase = (camelCase: string) => {
-    const result = camelCase.replace(/([A-Z])/g, " $1");
-    const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-    return finalResult;
-  };
-  const data = useMemo(() => getEmployees(), []);
-  const columns = useMemo(
-    () =>
-      Object.keys(data[0]).map((x: string) => {
-        return {
-          name: x,
-          label: camelCaseToTitleCase(x),
-          options: {
-            filter: true,
-            sort: true,
-          },
-        };
-      }),
-    [data]
-  );
+  const [data, setData] = useState([] as EmployeeData[]);
+  useEffect(() => {
+    getEmployees().then((res: EmployeeData[]) => {
+      setData(res);
+    });
+  }, []);
+  const columns = [
+    {
+      name: "firstName",
+      label: "First Name",
+    },
+    {
+      name: "lastName",
+      label: "Last Name",
+    },
+    {
+      name: "startDate",
+      label: "Start Date",
+    },
+    {
+      name: "department",
+      label: "Department",
+    },
+    {
+      name: "dateOfBirth",
+      label: "Date of Birth",
+    },
+    {
+      name: "street",
+      label: "Street",
+    },
+    {
+      name: "city",
+      label: "City",
+    },
+    {
+      name: "state",
+      label: "State",
+    },
+    {
+      name: "zipCode",
+      label: "Zip Code",
+    },
+  ];
   const options = {
     selectableRows: "none" as SelectableRows,
   };
